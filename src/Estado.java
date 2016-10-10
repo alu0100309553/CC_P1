@@ -3,8 +3,11 @@ import java.util.ArrayList;
 public class Estado {
 	private ArrayList <FTrans> ftrans = new ArrayList <FTrans>();
 	private boolean esFinal = false;
+	private String id;
 
-	Estado(){}
+	Estado(String identificador){
+		id = identificador;
+	}
 	public void setFinal(){
 		esFinal= true;
 	}
@@ -35,5 +38,8 @@ public class Estado {
 			}
 		}
 		return aux;
+	}
+	public String getId(){
+		return id;
 	}
 }

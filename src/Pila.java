@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class Pila {
-	public Stack <String> pila = new Stack <String>();
+	private Stack <String> pila = new Stack <String>();
 	private ArrayList <String> alpPila = new ArrayList <String>();
 	Pila (ArrayList <String> element){
 		alpPila = element;
@@ -21,11 +21,27 @@ public class Pila {
 	}
 	public void insertar(ArrayList <String> elementos){
 		if (!elementos.get(0).equals("*")){
-			//for (String elemento : elementos){
 			for (int i = elementos.size()-1; i >= 0; i--){
-				pila.push(elementos.get(i));
+				if (alpPila.contains(elementos.get(i))){
+					pila.push(elementos.get(i));
+				}
+				else {
+					System.err.println("Se ha intentado intruducir un simbolo no perteneciente al alfabeto de la pila");
+				}
 			}
 		}
-		System.out.println(pila);
+	}
+	public int size () {
+		return pila.size();
+	}
+	public boolean isEmpty () {
+		return pila.isEmpty();
+	}
+	public String getPila(){
+		String aux = "";
+		for (String item : pila){
+			aux += " "+item;
+		}
+		return aux;
 	}
 }

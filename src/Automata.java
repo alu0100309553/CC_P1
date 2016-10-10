@@ -11,15 +11,14 @@ public class Automata {
 	private int estFinales = 0;
 	Automata(ArrayList <ArrayList<String>> programa){
 		for (String est : programa.get(0)){
-			estados.put(est, new Estado());
+			estados.put(est, new Estado(est));
 		}
 		cinta = new Cinta (programa.get(1));
 		pila = new Pila (programa.get(2));
 		actual = estados.get(programa.get(3).get(0));
-		System.out.println(programa.get(3).get(0));
 		pila.insertar(programa.get(4)); 
 		for (String estado : programa.get(5)){
-			if (estado != "*"){
+			if (!estado.equals("*")){
 				estados.get(estado).setFinal();
 				estFinales++;
 			}
@@ -28,43 +27,46 @@ public class Automata {
 			estados.get(programa.get(i).get(0)).addFTran(programa.get(i));
 		}
 	}
-	public void run (String cadena) {
+	public boolean run (String cadena, boolean traza) {
 		cinta.setCinta(cadena);
 		boolean ejecutando = true;
 		boolean aceptada = false;
 		while (ejecutando){
-			System.out.println(cinta.puntero);
-			if ((actual.esFinal() && cinta.puntero < 0) || (cinta.puntero < 0 && pila.pila.size()==1 && estFinales == 0)){
+			ArrayList <String> transPos = new ArrayList <String>();
+			if ((actual.esFinal() && cinta.puntero() < 0) || (cinta.puntero() < 0 && pila.isEmpty() && estFinales == 0)){
 				ejecutando = false;
 				aceptada = true;
+				if (traza){
+					traza(transPos);
+				}
 				break;
 			}else {
-				if (cinta.puntero >= 0){
-					System.out.println(pila.consultar());
+				if (cinta.puntero() >= 0 && !pila.isEmpty()){
 					for (FTrans t : actual.explorar(cinta.read(), pila.consultar())){
-
-						System.out.println("//" + t.getNext());
-						trans.push(new Transcicion(new Pila (pila), cinta.puntero, t));
+						transPos.add(t.getNext());
+						trans.push(new Transcicion(new Pila (pila), cinta.puntero(), t));
 					}
 				} else {
-					System.out.println(pila.consultar());
-					for (FTrans t : actual.explorar(pila.consultar())){
-						System.out.println("///" + t.getNext());
-						trans.push(new Transcicion(new Pila (pila), cinta.puntero, t));
+					if (!pila.isEmpty()){
+						for (FTrans t : actual.explorar(pila.consultar())){
+							transPos.add(t.getNext());
+							trans.push(new Transcicion(new Pila (pila), cinta.puntero(), t));
+						}
 					}
 				}			
 			}
+			if (traza){
+				traza(transPos);
+			}
 			if (!trans.isEmpty()){
 				Transcicion transAct = trans.pop();
-				pila = transAct.pila;
-				FTrans act = transAct.ftran;
-				System.out.println("----------------------");
-				System.out.println(act.getNext());
+				pila = transAct.getPila();
+				FTrans act = transAct.getFtran();
 				pila.extraer();//actualizar pila
 				pila.insertar(act.escPila);
-				cinta.puntero = new Integer(transAct.cinta);
+				cinta.setPuntero(transAct.getCinta());//new Integer(transAct.getCinta()));
 				if (!act.getCinta().equals("*")){
-					cinta.puntero--;//consumir cinta
+					cinta.punteroDec();//consumir cinta
 				}
 				actual = estados.get(act.getNext());
 			} else {
@@ -73,6 +75,11 @@ public class Automata {
 				break;
 			}
 		}
-		System.out.println(aceptada);
+		return aceptada;
+
+	}
+	private void traza(ArrayList <String> transPos){
+		System.out.println(actual.getId() + cinta.getCinta() + pila.getPila() + transPos);
+		System.out.println("----------------------");
 	}
 }
