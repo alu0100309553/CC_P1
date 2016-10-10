@@ -1,0 +1,11 @@
+# Comentarios
+q0 q1 # conjunto Q
+0 1 # conjunto Σ
+0 1 S # conjunto Γ
+q0 # estado inicial
+S # símbolo inicial de la pila
+q0 # conjunto F
+q0 0 S q1 S
+q0 1 S q1 S
+q1 0 S q0 S
+q1 1 S q0 S
