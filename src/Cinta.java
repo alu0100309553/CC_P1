@@ -27,6 +27,7 @@ public class Cinta {
 			}
 			else {
 				System.err.println("Se ha intentado intruducir un simbolo no perteneciente al alfabeto de la cinta");
+				System.exit(1);
 			}
 
 		}

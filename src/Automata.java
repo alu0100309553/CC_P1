@@ -62,11 +62,11 @@ public class Automata {
 				Transcicion transAct = trans.pop();
 				pila = transAct.getPila();
 				FTrans act = transAct.getFtran();
-				pila.extraer();//actualizar pila
+				pila.extraer();
 				pila.insertar(act.escPila);
-				cinta.setPuntero(transAct.getCinta());//new Integer(transAct.getCinta()));
+				cinta.setPuntero(transAct.getCinta());
 				if (!act.getCinta().equals("*")){
-					cinta.punteroDec();//consumir cinta
+					cinta.punteroDec();
 				}
 				actual = estados.get(act.getNext());
 			} else {
@@ -79,7 +79,11 @@ public class Automata {
 
 	}
 	private void traza(ArrayList <String> transPos){
-		System.out.println(actual.getId() + cinta.getCinta() + pila.getPila() + transPos);
+		String aux = "";
+		for (String item : transPos){
+			aux += " "+item;
+		}
+		System.out.println(actual.getId() + " ||" + cinta.getCinta() + " ||" + pila.getPila() + " ||" + aux);
 		System.out.println("----------------------");
 	}
 }

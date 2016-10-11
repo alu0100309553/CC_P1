@@ -27,6 +27,7 @@ public class Pila {
 				}
 				else {
 					System.err.println("Se ha intentado intruducir un simbolo no perteneciente al alfabeto de la pila");
+					System.exit(1);
 				}
 			}
 		}
